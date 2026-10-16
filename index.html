@@ -1,0 +1,359 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Roblox Halloween Rewards</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@500;700;800;900&display=swap">
+<style>
+:root {
+  --bg: #111214;
+  --bg-gradient: radial-gradient(circle at top center, #2a183d 0%, #111214 60%);
+  --card: #232527;
+  --card-hover: #393B3D;
+  --line: #4A4C4F;
+  --primary: #ff8a1f;
+  --primary-d: #d86900;
+  --text: #F5F6F8;
+  --muted: #B8B9B9;
+  --robux: #F4B400;
+  --item-bg: #1a1b1c;
+  --accent-purple: #9b59b6;
+}
+
+* { box-sizing: border-box; touch-action: manipulation; }
+
+html, body {
+  margin: 0;
+  background: var(--bg);
+  background-image: var(--bg-gradient);
+  background-attachment: fixed;
+  color: var(--text);
+  font-family: 'Inter', system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+  min-height: 100vh;
+}
+
+.bg-decor {
+  position: absolute;
+  pointer-events: none;
+  z-index: 0;
+  filter: drop-shadow(0 4px 6px rgba(0,0,0,0.5));
+}
+.cake-l { top: 5px; left: -5px; font-size: 28px; transform: rotate(-10deg); }
+.cake-r { top: 0px; right: -5px; font-size: 24px; transform: rotate(15deg); }
+.bat-l { top: 120px; left: -15px; font-size: 35px; transform: rotate(-25deg); opacity: 0.8; }
+.bat-r { top: 160px; right: -15px; font-size: 40px; transform: rotate(20deg); opacity: 0.8; }
+.tomb-l { bottom: 60px; left: -15px; font-size: 40px; opacity: 0.9; }
+.tomb-r { bottom: 80px; right: -10px; font-size: 35px; opacity: 0.9; }
+/* Тыквы теперь прижаты вплотную к панели */
+.glow-pump-l { bottom: -10px; left: -15px; font-size: 60px; text-shadow: 0 0 30px var(--primary), 0 0 60px var(--primary-d); z-index: 10; filter: drop-shadow(0 0 10px var(--primary)); }
+.glow-pump-r { bottom: -10px; right: -15px; font-size: 60px; text-shadow: 0 0 30px var(--primary), 0 0 60px var(--primary-d); z-index: 10; filter: drop-shadow(0 0 10px var(--primary)); }
+
+.roblox-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 2px;
+  z-index: 10;
+  position: relative;
+  cursor: pointer;
+  user-select: none;
+}
+.roblox-logo {
+  font-family: 'Inter', display;
+  font-weight: 900;
+  font-size: 24px;
+  color: #ff8a1f;
+  text-shadow: 0 0 15px rgba(255, 138, 31, 0.6), 0 0 20px #d86900;
+  letter-spacing: 2px;
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+  color: inherit;
+  transition: transform 0.1s ease, background 0.2s ease;
+  position: relative;
+  z-index: 1;
+}
+button:active { transform: scale(0.95); }
+
+.app {
+  width: 100%;
+  max-width: 400px;
+  margin: 3vh auto; /* Небольшой отступ сверху, высота теперь подстраивается под контент */
+  padding: 12px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  position: relative;
+  z-index: 1;
+}
+
+.display { font-weight: 900; letter-spacing: -0.02em; }
+
+.top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(35, 37, 39, 0.7);
+  padding: 8px 10px;
+  border-radius: 10px;
+  border: 1px solid var(--line);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+}
+
+.kicker { font-size: 10px; font-weight: 800; letter-spacing: 0.1em; color: var(--primary); text-transform: uppercase; }
+h1 { margin: 0 0 2px; font-size: 18px; line-height: 1.1; color: var(--text); }
+.sub { font-size: 11px; color: var(--muted); font-weight: 500; }
+
+.bagbtn {
+  flex: none; display: flex; align-items: center; gap: 4px;
+  height: 34px; padding: 0 8px; border-radius: 8px;
+  border: 1px solid var(--line); background: var(--card);
+  color: var(--text); font-size: 13px; font-weight: 800;
+}
+.bagbtn:hover { background: var(--card-hover); border-color: var(--primary); box-shadow: 0 0 10px rgba(255, 138, 31, 0.2); }
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 6px;
+}
+
+.tile {
+  height: 75px;
+  border-radius: 8px;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 2px; padding: 0; overflow: hidden; position: relative;
+  background: rgba(35, 37, 39, 0.8); backdrop-filter: blur(4px); border: 1px solid var(--line);
+}
+
+.tile.ready { border: 1px solid var(--accent-purple); box-shadow: inset 0 0 15px rgba(155, 89, 182, 0.1); }
+.tile.ready:hover { background: var(--card-hover); border-color: var(--primary); box-shadow: inset 0 0 20px rgba(255, 138, 31, 0.2); }
+.tile.ready .q { font-size: 22px; font-weight: 800; color: var(--primary); text-shadow: 0 0 10px rgba(255,138,31,0.5); }
+.tile.ready .lb { font-size: 10px; font-weight: 700; color: var(--muted); }
+
+.tile.robux { border: 1px solid rgba(244, 180, 0, 0.3); background: rgba(244, 180, 0, 0.05); color: var(--text); }
+.tile.robux .amt { font-size: 13px; font-weight: 900; }
+.tile.robux .lb { font-size: 9px; font-weight: 700; color: var(--muted); }
+
+.tile.skin { border: 1px solid var(--accent-purple); background: var(--item-bg); box-shadow: inset 0 0 15px rgba(155, 89, 182, 0.15); }
+.tile.skin img { width: 34px; height: 34px; object-fit: contain; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5)); }
+.tile.skin .lb { font-size: 9px; font-weight: 900; letter-spacing: 0.05em; background: var(--accent-purple); color: white; padding: 1px 4px; border-radius: 4px; }
+
+.panel {
+  display: flex; flex-direction: column; gap: 8px;
+  padding: 10px 12px; border-radius: 10px;
+  background: rgba(35, 37, 39, 0.8); border: 1px solid var(--line);
+  backdrop-filter: blur(8px);
+}
+.row { display: flex; justify-content: space-between; font-size: 12px; font-weight: 800; }
+.bar { height: 8px; border-radius: 4px; background: var(--bg); overflow: hidden; box-shadow: inset 0 2px 4px rgba(0,0,0,0.5); }
+.bar > div { height: 100%; background: linear-gradient(90deg, var(--accent-purple), var(--primary)); border-radius: 4px; transition: width 0.4s ease; }
+.note { font-size: 11px; color: var(--muted); line-height: 1.4; font-weight: 500; text-align: center; }
+
+.overlay {
+  position: fixed; inset: 0; background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+  display: flex; align-items: center; justify-content: center; padding: 20px;
+  z-index: 9999;
+}
+.modal {
+  width: 100%; max-width: 320px; display: flex; flex-direction: column; align-items: center; gap: 12px;
+  padding: 24px 20px 20px; border-radius: 16px; background: var(--card); border: 2px solid var(--line);
+  box-shadow: 0 20px 50px rgba(0,0,0,0.8), 0 0 0 1px rgba(255,255,255,0.05) inset; text-align: center; position: relative;
+  animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+@keyframes popIn { 0% { transform: scale(0.8); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+.modal::before { content: ""; position: absolute; top: 0; left: 0; right: 0; height: 4px; background: linear-gradient(90deg, var(--accent-purple), var(--primary)); }
+.modal .t { font-size: 12px; font-weight: 800; letter-spacing: 0.1em; color: var(--muted); }
+.big { font-size: 48px; line-height: 1; color: var(--text); margin-top: 4px; text-shadow: 0 4px 10px rgba(0,0,0,0.5); }
+.newskin { font-size: 28px; line-height: 1; color: var(--primary); margin-bottom: 4px; text-shadow: 0 0 15px rgba(255, 138, 31, 0.4); }
+.skinbox { width: 140px; height: 140px; border-radius: 12px; background: radial-gradient(circle, var(--card-hover), var(--bg)); border: 2px solid var(--accent-purple); display: flex; align-items: center; justify-content: center; box-shadow: 0 0 40px rgba(155, 89, 182, 0.3), inset 0 0 20px rgba(0,0,0,0.5); }
+.skinbox img { width: 110px; height: 110px; object-fit: contain; filter: drop-shadow(0 10px 15px rgba(0,0,0,0.6)); }
+.claim { width: 100%; height: 44px; border-radius: 8px; border: none; background: var(--text); color: var(--bg); font-size: 15px; font-weight: 800; margin-top: 8px; }
+.claim.green { background: var(--text); color: var(--bg); }
+.claim.green:hover { background: var(--primary); color: #fff; box-shadow: 0 0 15px rgba(255, 138, 31, 0.5); }
+.claim:hover { opacity: 0.9; }
+
+.robux-icon { display: inline-block; vertical-align: middle; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3)); }
+.particle { position: fixed; width: 6px; height: 6px; border-radius: 50%; pointer-events: none; z-index: 10000; }
+
+.head { display: flex; align-items: center; gap: 12px; }
+.back { width: 40px; height: 40px; border-radius: 8px; border: 1px solid var(--line); background: var(--card); display: flex; align-items: center; justify-content: center; padding: 0; }
+.back:hover { background: var(--card-hover); }
+.total { display: flex; align-items: center; justify-content: center; gap: 12px; padding: 16px; border-radius: 10px; background: rgba(35, 37, 39, 0.8); border: 1px solid var(--line); backdrop-filter: blur(8px); }
+.total .n { font-size: 36px; line-height: 1; text-shadow: 0 2px 8px rgba(0,0,0,0.5);}
+h2 { margin: 8px 0 0; font-size: 16px; font-weight: 800; }
+.skins { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+.skin-have { display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 8px 4px; border-radius: 8px; background: var(--item-bg); border: 1px solid var(--accent-purple); color: var(--text); font-size: 10px; font-weight: 800; text-align: center; box-shadow: inset 0 0 10px rgba(155, 89, 182, 0.1);}
+.skin-have img { width: 50px; height: 50px; object-fit: contain; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.5));}
+.skin-miss { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; height: 90px; border-radius: 8px; background: rgba(35,37,39,0.5); border: 1px dashed var(--line); color: var(--muted); font-size: 10px; font-weight: 700; }
+.skin-miss .q { font-size: 24px; color: var(--line); font-weight: 800; }
+.hist { display: flex; flex-direction: column; gap: 6px; }
+.hist div { display: flex; justify-content: space-between; gap: 10px; padding: 10px 12px; border-radius: 8px; background: rgba(35,37,39,0.8); font-size: 12px; font-weight: 700; border: 1px solid var(--line); }
+</style>
+</head>
+<body>
+<div id="root"></div>
+
+<script>
+var IMG = {
+  skin8: 'https://i.ibb.co/jZRc3ZRr/2026-10-16-11-16-35.png',
+  skin12: 'https://i.ibb.co/HfqjHxv6/2026-10-16-11-16-44.png',
+  skin15: 'https://i.ibb.co/LdV1s0Yn/2026-10-16-11-16-18.png'
+};
+
+var DAYS = [
+  {t:'r',n:250},{t:'r',n:500},{t:'r',n:1000},{t:'r',n:2500},
+  {t:'r',n:4000},{t:'r',n:6000},{t:'r',n:8500},
+  {t:'s',k:'skin8',name:'Spooky Item'},
+  {t:'r',n:10000},{t:'r',n:12500},{t:'r',n:15000},
+  {t:'s',k:'skin12',name:'Cursed Item'},
+  {t:'r',n:17000},{t:'r',n:18500},
+  {t:'s',k:'skin15',name:'Haunted Item'},
+  {t:'r',n:20000}
+];
+
+var KEY = 'roblox-halloween-2026-v2';
+var opened = {};
+try { opened = JSON.parse(localStorage.getItem(KEY) || '{}') || {}; } catch (e) {}
+var screen = 'cal', modal = null;
+
+function save() { 
+  try { localStorage.setItem(KEY, JSON.stringify(opened)); } catch (e) {} 
+}
+
+function robuxIcon(size) {
+  return '<img class="robux-icon" src="https://i.ibb.co/7x7NjG2w/cropped-png-1-1.png" style="width:'+size+'px; height:'+size+'px; object-fit:contain;" alt="Robux">';
+}
+
+function stats() {
+  var robux = 0, count = 0, skins = 0;
+  DAYS.forEach(function(d, i) { 
+    if (opened[i]) { count++; if (d.t === 'r') robux += d.n; else skins++; } 
+  });
+  return { robux: robux, count: count, skins: skins };
+}
+
+function shootParticles() {
+  if (typeof document.body.animate !== 'function') return;
+  var colors = ['#ff8a1f', '#9b59b6', '#f4b400', '#ffffff'];
+  for(var i=0; i<30; i++) {
+    var p = document.createElement('div');
+    p.className = 'particle';
+    p.style.left = '50%'; p.style.top = '50%';
+    p.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+    document.body.appendChild(p);
+    
+    var angle = Math.random() * Math.PI * 2;
+    var velocity = 50 + Math.random() * 200;
+    var tx = Math.cos(angle) * velocity;
+    var ty = Math.sin(angle) * velocity;
+    
+    var anim = p.animate([
+      { transform: 'translate(-50%, -50%) scale(1)', opacity: 1 },
+      { transform: 'translate(calc(-50% + ' + tx + 'px), calc(-50% + ' + ty + 'px)) scale(0)', opacity: 0 }
+    ], { duration: 600 + Math.random() * 500, easing: 'cubic-bezier(0.1, 0.8, 0.3, 1)' });
+    
+    anim.onfinish = (function(el) { return function() { el.remove(); } })(p);
+  }
+}
+
+function render() {
+  var s = stats(), h = '';
+  h += '<div class="app">';
+  
+  // Декорации прямо в контейнере приложения
+  h += '<div class="bg-decor cake-l">🎂</div><div class="bg-decor cake-r">🎂</div>';
+  h += '<div class="bg-decor bat-l">🦇</div><div class="bg-decor bat-r">🦇</div>';
+  h += '<div class="bg-decor tomb-l">🪦</div><div class="bg-decor tomb-r">🪦</div>';
+  h += '<div class="bg-decor glow-pump-l">🎃</div><div class="bg-decor glow-pump-r">🎃</div>';
+  
+  if (screen === 'cal') {
+    // Скрытая кнопка сброса
+    h += '<div class="roblox-header" data-act="reset"><span style="font-size:20px; filter:drop-shadow(0 0 8px #ff8a1f)">🕯️</span><div class="roblox-logo">ROBLOX</div><span style="font-size:20px; filter:drop-shadow(0 0 8px #ff8a1f)">🎃</span></div>';
+    
+    h += '<div class="top"><div><div class="kicker">HALLOWEEN EVENT</div><h1 class="display">Rewards Event</h1><div class="sub">Tap a crate to reveal</div></div>';
+    h += '<button class="bagbtn" data-act="bag" aria-label="Open Balance">' + robuxIcon(18) + '<span>' + s.robux.toLocaleString('en-US') + '</span></button></div>';
+    
+    h += '<div class="grid">';
+    DAYS.forEach(function(d, i) {
+      var lb = 'Day ' + (i + 1);
+      if (!opened[i]) {
+        h += '<button class="tile ready" data-day="' + i + '"><span class="q display">?</span><span class="lb">' + lb + '</span></button>';
+      } else if (d.t === 'r') {
+        h += '<button class="tile robux" data-day="' + i + '">' + robuxIcon(20) + '<span class="amt">+' + (d.n >= 1000 ? (d.n/1000) + 'k' : d.n) + '</span><span class="lb">' + lb + '</span></button>';
+      } else {
+        h += '<button class="tile skin" data-day="' + i + '"><img src="' + IMG[d.k] + '" alt=""><span class="lb">ITEM</span></button>';
+      }
+    });
+    h += '</div>';
+    
+    h += '<div class="panel"><div class="row"><span>Opened ' + s.count + ' / 16</span><span style="color:var(--primary)">Items ' + s.skins + ' / 3</span></div>';
+    h += '<div class="bar"><div style="width:' + Math.round(s.count / 16 * 100) + '%"></div></div>';
+    h += '<div class="note">3 crates hide an exclusive Avatar Item.<br>Every item is a real gift!</div></div>';
+  } else {
+    h += '<div class="head"><button class="back" data-act="cal"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg></button><h1 class="display">My Inventory</h1></div>';
+    h += '<div class="total">' + robuxIcon(36) + '<div><div class="n display">' + s.robux.toLocaleString('en-US') + '</div><div class="sub">Robux balance</div></div></div>';
+    h += '<h2>Avatar Items</h2><div class="skins">';
+    [7, 11, 14].forEach(function(i) {
+      var d = DAYS[i];
+      h += opened[i] ? '<div class="skin-have"><img src="' + IMG[d.k] + '" alt="' + d.name + '"><span>' + d.name + '</span></div>' : '<div class="skin-miss"><span class="q display">?</span>Locked</div>';
+    });
+    h += '</div><h2>History</h2><div class="hist">';
+    var any = false;
+    for (var i = DAYS.length - 1; i >= 0; i--) {
+      if (opened[i]) {
+        any = true; var d = DAYS[i];
+        h += '<div><span>Day ' + (i + 1) + '</span><span style="color:' + (d.t === 'r' ? 'var(--robux)' : 'var(--primary)') + '">' + (d.t === 'r' ? '+' + d.n.toLocaleString('en-US') + ' Robux' : 'Item: ' + d.name) + '</span></div>';
+      }
+    }
+    if (!any) h += '<p class="sub" style="text-align:center">No history yet — open your first crate!</p>';
+    h += '</div>';
+  }
+
+  if (modal !== null) {
+    var d = DAYS[modal];
+    h += '<div class="overlay"><div class="modal"><div class="t">DAY ' + (modal + 1) + '</div>';
+    if (d.t === 'r') {
+      h += robuxIcon(70) + '<div class="big display">+' + d.n.toLocaleString('en-US') + '</div><div style="font-size:13px; font-weight:700; color:var(--muted); margin-bottom:8px;">Robux added to your balance</div>';
+    } else {
+      h += '<div class="newskin display">AVATAR ITEM!</div><div class="skinbox"><img src="' + IMG[d.k] + '" alt="' + d.name + '"></div><div style="font-size:18px;font-weight:900;margin-top:10px;">' + d.name + '</div><div class="sub" style="margin-bottom:8px;">This item is a real gift!</div>';
+    }
+    h += '<button class="claim ' + (opened[modal] ? '' : 'green') + '" data-act="claim">' + (opened[modal] ? 'Close' : 'Claim Reward') + '</button></div></div>';
+  }
+
+  h += '</div>'; // Close .app
+  document.getElementById('root').innerHTML = h;
+}
+
+document.addEventListener('click', function(e) {
+  var resetBtn = e.target.closest('[data-act="reset"]');
+  if (resetBtn) {
+    opened = {}; save(); modal = null; render(); return;
+  }
+
+  var b = e.target.closest('button'); 
+  if (!b) return;
+  
+  if (b.dataset.day !== undefined) { 
+    modal = +b.dataset.day; 
+    if (!opened[modal]) shootParticles(); 
+  }
+  else if (b.dataset.act === 'claim') { opened[modal] = true; save(); modal = null; }
+  else if (b.dataset.act === 'bag') { screen = 'bag'; }
+  else if (b.dataset.act === 'cal') { screen = 'cal'; }
+  render();
+});
+
+render();
+</script>
+</body>
+</html>
